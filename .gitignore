@@ -1,0 +1,16 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+mlflow/
+mlruns/
+model/finbert-finetuned/
+node_modules/
+frontend/dist/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+README_assets/
