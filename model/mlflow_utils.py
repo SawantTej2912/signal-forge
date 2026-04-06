@@ -19,6 +19,12 @@ def get_tracking_uri() -> str:
 
 def load_champion_pipeline():
     """Load the @champion FinBERT pipeline from MLflow Model Registry."""
+    from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
+
     mlflow.set_tracking_uri(get_tracking_uri())
-    model_uri = f"models:/{REGISTERED_MODEL}@{CHAMPION_ALIAS}"
-    return mlflow.transformers.load_model(model_uri)
+    client = mlflow.MlflowClient()
+    version = client.get_model_version_by_alias(REGISTERED_MODEL, CHAMPION_ALIAS)
+    local_path = mlflow.artifacts.download_artifacts(version.source)
+    tokenizer = AutoTokenizer.from_pretrained(local_path)
+    model = AutoModelForSequenceClassification.from_pretrained(local_path)
+    return pipeline("text-classification", model=model, tokenizer=tokenizer)

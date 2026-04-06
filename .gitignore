@@ -5,6 +5,8 @@ __pycache__/
 .DS_Store
 mlflow/
 mlruns/
+mlflow_artifacts/
+mlflow.db
 model/finbert-finetuned/
 node_modules/
 frontend/dist/
