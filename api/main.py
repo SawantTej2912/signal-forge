@@ -4,6 +4,7 @@ FastAPI layer for SignalForge.
 Endpoints:
     GET /health
     GET /signal?ticker=TSLA[&window_hours=24]
+    GET /signals/all[?window_hours=24]
     GET /backtest?ticker=TSLA&lag=3[&period=90d]
 """
 
@@ -21,6 +22,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from signals.backtester import run_backtest
 from signals.signal_engine import compute_signal
+
+TICKERS = ["AAPL", "TSLA", "NVDA", "MSFT", "AMZN", "META", "GOOGL", "AMD"]
 
 app = FastAPI(title="SignalForge API", version="1.0.0")
 
@@ -48,6 +51,11 @@ def signal(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     return result
+
+
+@app.get("/signals/all")
+def signals_all(window_hours: int = Query(24, ge=1, le=168)):
+    return [compute_signal(t, window_hours) for t in TICKERS]
 
 
 @app.get("/backtest")
