@@ -26,6 +26,7 @@ POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "signalforge123")
 
 BUY_THRESHOLD = 0.3
 SELL_THRESHOLD = -0.3
+MIN_SAMPLES = 20
 
 
 def get_conn():
@@ -52,12 +53,12 @@ def compute_signal(ticker: str, window_hours: int = 24) -> dict:
             cur.execute(query, (ticker, cutoff_utc))
             rows = cur.fetchall()
 
-    if not rows:
+    if not rows or len(rows) < MIN_SAMPLES:
         return {
             "ticker": ticker,
             "signal": "HOLD",
             "sentiment_score": 0.0,
-            "sample_size": 0,
+            "sample_size": len(rows),
             "window_hours": window_hours,
             "generated_at": datetime.now(timezone.utc).isoformat(),
         }

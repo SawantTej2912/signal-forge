@@ -8,7 +8,7 @@ import json
 import time
 import logging
 import hashlib
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import finnhub
 import requests
@@ -48,8 +48,10 @@ def make_producer() -> KafkaProducer:
 
 def fetch_finnhub(client: finnhub.Client, ticker: str) -> list[dict]:
     """Return normalized messages from Finnhub company-news for one ticker."""
+    date_from = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
+    date_to   = datetime.now().strftime("%Y-%m-%d")
     try:
-        news_items = client.company_news(ticker, _from="2020-01-01", to="2099-01-01")
+        news_items = client.company_news(ticker, _from=date_from, to=date_to)
     except Exception as exc:
         log.warning("Finnhub error for %s: %s", ticker, exc)
         return []
