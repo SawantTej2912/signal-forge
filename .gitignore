@@ -15,4 +15,3 @@ venv/
 *.egg-info/
 dist/
 build/
-README_assets/
