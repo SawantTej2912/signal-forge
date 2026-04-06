@@ -106,13 +106,13 @@ def run_backtest(ticker: str, lag_days: int = 3, period: str = "90d") -> dict:
 
     # Shift sentiment by lag days to simulate delayed signal execution
     sentiment = sentiment.copy()
-    sentiment["signal_date"] = sentiment["date"] + pd.Timedelta(days=lag_days)
+    sentiment["date"] = sentiment["date"] + pd.Timedelta(days=lag_days)
 
     merged = prices.merge(
-        sentiment.rename(columns={"signal_date": "date"}),
+        sentiment,
         on="date",
         how="left",
-    ).fillna(method="ffill")
+    ).ffill()
 
     merged["signal"] = merged["sentiment_score"].apply(
         lambda s: "BUY" if s > BUY_THRESHOLD else ("SELL" if s < SELL_THRESHOLD else "HOLD")
