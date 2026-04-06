@@ -9,3 +9,5 @@ export const fetchAllSignals = (windowHours = 24) =>
   api.get('/signals/all', { params: { window_hours: windowHours } }).then(r => r.data)
 export const fetchBacktest = (ticker, lag, period = '90d') =>
   api.get('/backtest', { params: { ticker, lag, period } }).then(r => r.data)
+export const fetchCandles = (ticker, period = '90d') =>
+  api.get('/candles', { params: { ticker, period } }).then(r => r.data)

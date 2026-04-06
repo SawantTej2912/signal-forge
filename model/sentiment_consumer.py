@@ -112,6 +112,9 @@ def run():
         value_deserializer=lambda b: json.loads(b.decode("utf-8")),
         auto_offset_reset="earliest",
         enable_auto_commit=True,
+        max_poll_interval_ms=600000,   # 10 min — gives FinBERT time between polls
+        session_timeout_ms=60000,      # 60s session timeout
+        heartbeat_interval_ms=20000,   # heartbeat every 20s
     )
 
     log.info("Consuming from topic '%s' ...", KAFKA_TOPIC)

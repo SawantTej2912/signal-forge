@@ -2,6 +2,7 @@ import { useState } from 'react'
 import HealthStatus from './components/HealthStatus'
 import Watchlist from './components/Watchlist'
 import SignalDetail from './components/SignalDetail'
+import CandlestickChart from './components/CandlestickChart'
 import BacktestPanel from './components/BacktestPanel'
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
         {/* Right panel */}
         <main className="flex-1 flex flex-col gap-4">
           <SignalDetail ticker={selectedTicker} />
+          <CandlestickChart ticker={selectedTicker} />
           <BacktestPanel ticker={selectedTicker} />
         </main>
 
